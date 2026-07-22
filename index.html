@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>우리의 100일 기념 일기장</title>
+    <title>白</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <header>
-        <h1>우리의 기록장</h1>
-        <p>100일간의 예쁜 추억들, 그리고 앞으로의 별빛</p>
+        <h1>기념일 일기장</h1>
+        <p id="dday-text" class="dday-counter">우리가 함께한 날짜 계산 중...</p>
     </header>
 
     <div class="timeline">
@@ -64,6 +64,26 @@
             </div>
             
             <button class="toggle-btn">자세히 보기 ▼</button>
+        </div>
+
+        <div class="hidden-letter-section">
+            <div id="lock-screen" class="lock-screen">
+                <h3>🔒 숨겨진 별빛 기록</h3>
+                <p>우리의 이야기가 시작된 날짜 4자리를 입력해줘.</p>
+                <input type="password" id="letter-password" placeholder="예: 0416" maxlength="4">
+                <button id="unlock-btn">열기</button>
+            </div>
+
+            <div id="secret-letter" class="secret-letter">
+                <h3>To. 하은</h3>
+                <p>
+                    이 웹사이트는 너를 생각하며 한 땀 한 땀 만든 우리의 공간이야.<br><br>
+                    이 웹사이트의 배경처럼, 반짝반짝 빛나는 별이 되어 밤하늘을 밝힐 수 있기를.<br>
+                    언제나 하늘에 있는 밤하늘의 별처럼 나 또한 언제나 너의 곁에 있을게.<br><br>
+                    앞으로도 하늘에 있는 별들의 수만큼, 수많은 추억을 만들자. <strong>사랑해.</strong>
+                </p>
+                <div class="signature">- by. 아시 -</div>
+            </div>
         </div>
 
     </div>

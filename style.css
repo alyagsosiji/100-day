@@ -1,4 +1,3 @@
-/* [1] 폰트 설정 */
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
 * {
@@ -7,17 +6,14 @@
     box-sizing: border-box;
 }
 
-/* [2] 은하수 배경 및 드래그 방지 설정 */
 body {
     font-family: 'Pretendard', sans-serif;
-    /* 짙은 우주 느낌의 방사형 그라데이션 */
     background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
     color: #e2e8f0;
     padding: 20px;
     overflow-x: hidden;
     min-height: 100vh;
     
-    /* 웹페이지 드래그 및 복사 방지 */
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -25,45 +21,69 @@ body {
     -webkit-user-drag: none;
 }
 
-/* 반짝이는 별빛 애니메이션 효과 */
-@keyframes twinkle {
-    0%, 100% { opacity: 0.8; transform: scale(1); }
-    50% { opacity: 0.3; transform: scale(0.95); }
+/* 제목 호버 애니메이션 (자연스러운 빛남) */
+@keyframes naturalGlow {
+    0% { text-shadow: 0 0 10px rgba(161, 140, 209, 0.3); transform: scale(1); }
+    50% { text-shadow: 0 0 25px rgba(251, 194, 235, 0.8); transform: scale(1.02); }
+    100% { text-shadow: 0 0 10px rgba(161, 140, 209, 0.3); transform: scale(1); }
 }
 
-/* 헤더 (제목 영역) */
 header {
     text-align: center;
     padding: 80px 0 50px 0;
     margin-bottom: 20px;
-    animation: twinkle 4s infinite ease-in-out;
 }
 
 header h1 {
     font-size: 2.8rem;
     margin-bottom: 15px;
     font-weight: 800;
-    /* 은하수처럼 빛나는 텍스트 효과 */
     background: linear-gradient(to right, #a18cd1 0%, #fbc2eb 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 20px rgba(161, 140, 209, 0.4);
+    transition: all 0.4s ease;
+    cursor: default;
 }
 
-header p {
-    font-size: 1.1rem;
-    color: #b0c4de;
+/* 마우스를 올렸을 때만 애니메이션 작동 */
+header h1:hover {
+    animation: naturalGlow 2.5s infinite ease-in-out;
+}
+
+/* 디데이 카운터 */
+.dday-counter {
+    font-size: 1.15rem;
+    color: #f6e58d;
     letter-spacing: 1.5px;
+    font-weight: 500;
+    background: rgba(255, 255, 255, 0.05);
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: 1px solid rgba(246, 229, 141, 0.2);
 }
 
-/* 타임라인 박스 */
 .timeline {
     max-width: 600px;
     margin: 0 auto;
     padding-bottom: 100px;
 }
 
-/* 개별 일기 카드 (오로라/은하수 느낌의 유리 질감) */
+/* 스크롤 페이드인 효과를 위한 기본 설정 (투명하고 아래로 내려가 있음) */
+.diary-card, .hidden-letter-section {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), 
+                transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* JS에서 .visible 클래스가 붙으면 스르륵 나타남 */
+.diary-card.visible, .hidden-letter-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 유리 질감 일기 카드 */
 .diary-card {
     background: rgba(20, 25, 45, 0.4);
     backdrop-filter: blur(15px);
@@ -71,26 +91,23 @@ header p {
     border-radius: 20px;
     padding: 30px;
     margin-bottom: 50px;
-    /* 카드의 테두리에 은은한 보라빛/파란빛 그라데이션 */
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 
                 inset 0 0 0 1px rgba(161, 140, 209, 0.2);
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
-                box-shadow 0.4s ease;
 }
 
-.diary-card:hover {
+/* 페이드인 완료 후 호버 효과 (transform 겹침 방지) */
+.diary-card.visible:hover {
     transform: translateY(-8px);
     box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8), 
                 inset 0 0 0 1px rgba(251, 194, 235, 0.4);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
-/* 날짜 텍스트 (별빛 색상) */
 .diary-date {
     font-size: 0.95rem;
     color: #f6e58d;
     margin-bottom: 10px;
     letter-spacing: 2px;
-    font-weight: 500;
 }
 
 .diary-title {
@@ -100,7 +117,6 @@ header p {
     color: #ffffff;
 }
 
-/* 이미지 영역 */
 .diary-img {
     width: 100%;
     height: 350px;
@@ -112,7 +128,6 @@ header p {
     justify-content: center;
     overflow: hidden;
     position: relative;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
 }
 
 .diary-img img {
@@ -133,7 +148,6 @@ header p {
     position: absolute;
 }
 
-/* 짧은 설명 */
 .desc-short {
     font-size: 1.1rem;
     line-height: 1.6;
@@ -141,7 +155,6 @@ header p {
     color: #e2e8f0;
 }
 
-/* 자세한 설명 (펼쳐질 때) */
 .desc-long {
     font-size: 1rem;
     line-height: 1.8;
@@ -160,7 +173,6 @@ header p {
     border-top: 1px solid rgba(161, 140, 209, 0.3);
 }
 
-/* 토글 버튼 (별빛 네온 스타일) */
 .toggle-btn {
     background-color: rgba(246, 229, 141, 0.05);
     color: #f6e58d;
@@ -181,4 +193,95 @@ header p {
     background-color: rgba(246, 229, 141, 0.15);
     border-color: #f6e58d;
     box-shadow: 0 0 15px rgba(246, 229, 141, 0.3);
+}
+
+/* 숨겨진 편지 영역 */
+.hidden-letter-section {
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 20px;
+    padding: 40px 30px;
+    text-align: center;
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+    margin-top: 50px;
+}
+
+.lock-screen h3 {
+    font-size: 1.3rem;
+    color: #fbc2eb;
+    margin-bottom: 10px;
+}
+
+.lock-screen p {
+    color: #a0aec0;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+}
+
+.lock-screen input {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 1.1rem;
+    width: 150px;
+    letter-spacing: 3px;
+    outline: none;
+    font-family: 'Pretendard', sans-serif;
+}
+
+.lock-screen button {
+    background: #a18cd1;
+    color: #fff;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-left: 10px;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+.lock-screen button:hover {
+    background: #fbc2eb;
+    color: #1b2735;
+}
+
+/* 실제 편지 내용 (초기 숨김) */
+.secret-letter {
+    display: none;
+    text-align: left;
+    line-height: 1.8;
+}
+
+.secret-letter.open {
+    display: block;
+    animation: fadeInLetter 1s ease forwards;
+}
+
+@keyframes fadeInLetter {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.secret-letter h3 {
+    font-size: 1.5rem;
+    color: #fbc2eb;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(251, 194, 235, 0.3);
+    padding-bottom: 10px;
+}
+
+.secret-letter p {
+    font-size: 1.05rem;
+    color: #e2e8f0;
+}
+
+.secret-letter .signature {
+    text-align: right;
+    margin-top: 30px;
+    font-weight: bold;
+    color: #f6e58d;
 }

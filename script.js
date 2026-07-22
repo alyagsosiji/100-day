@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const ddayText = document.getElementById("dday-text");
         if (ddayText) {
-            ddayText.innerText = `우리가 함께한 지 ${days}일 ${hours}시간 ${minutes}분 ${seconds}초`;
+            ddayText.innerText = `❤ ${days}일 ${hours}시간 ${minutes}분 ${seconds}초`;
         }
     }
     

@@ -2,11 +2,29 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>白</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+    <div id="shooting-stars" class="shooting-stars-container" aria-hidden="true">
+        <div class="shooting-star"></div>
+        <div class="shooting-star"></div>
+        <div class="shooting-star"></div>
+        <div class="shooting-star"></div>
+    </div>
+
+    <button id="star-toggle-btn" class="star-toggle-btn" aria-label="별똥별 효과 켜기/끄기">
+        ✨ 별똥별 <span id="star-status">ON</span>
+    </button>
+
+    <div class="bgm-player">
+        <audio id="bgm-audio" loop src="bgm.mp3"></audio>
+        <button id="bgm-toggle-btn" class="bgm-btn" aria-label="음악 재생/일시정지">
+            <span id="bgm-icon">🎵</span>
+        </button>
+    </div>
 
     <header>
         <h1>기념일 일기장</h1>
@@ -112,7 +130,6 @@
             <button class="toggle-btn">자세히 보기 ▼</button>
         </div>
 
-
         <div class="diary-card">
             <div class="diary-date">6. Day 101: 2026. 07. 25</div>
             <h2 class="diary-title">언제나 우리가 함께이기를</h2>
@@ -138,7 +155,7 @@
             <div id="lock-screen" class="lock-screen">
                 <h3>🔒 숨겨진 별빛 기록</h3>
                 <p>우리의 이야기가 시작된 날짜 4자리를 입력해줘.</p>
-                <input type="password" id="letter-password" placeholder="예: 0114" maxlength="4">
+                <input type="password" id="letter-password" placeholder="예: 0114" maxlength="4" inputmode="numeric">
                 <button id="unlock-btn">열기</button>
             </div>
 
@@ -155,6 +172,18 @@
         </div>
 
     </div>
+
+    <footer class="site-footer">
+        <p>우리의 이야기가 행복이기를.</p>
+        <p class="copyright">© 2026. atritime. & haeun. All rights reserved.</p>
+    </footer>
+
+    <div id="image-modal" class="image-modal">
+        <span class="modal-close">&times;</span>
+        <img class="modal-content" id="modal-img" alt="확대 이미지">
+    </div>
+
+    <button id="top-btn" class="top-btn" aria-label="맨 위로 이동">▲</button>
 
     <script src="script.js"></script>
 </body>

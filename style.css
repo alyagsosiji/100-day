@@ -103,18 +103,17 @@ body {
                 0 0 30px 6px rgba(161, 140, 209, 0.7);
 }
 
-/* ease-out을 사용하여 처음엔 슈욱- 떨어지다 끝에서 우아하게 스르륵 사라짐 */
-.shooting-star:nth-child(1) { top: -10%; right: -10%; animation: shooting 4.5s infinite ease-out 0s; }
-.shooting-star:nth-child(2) { top: 20%; right: -5%; animation: shooting 5.5s infinite ease-out 1.5s; }
-.shooting-star:nth-child(3) { top: -5%; right: 30%; animation: shooting 4s infinite ease-out 3s; }
-.shooting-star:nth-child(4) { top: 45%; right: -10%; animation: shooting 6s infinite ease-out 1s; }
-.shooting-star:nth-child(5) { top: -15%; right: 60%; animation: shooting 5s infinite ease-out 4.5s; }
-.shooting-star:nth-child(6) { top: 10%; right: 10%; animation: shooting 4.8s infinite ease-out 2.5s; }
-.shooting-star:nth-child(7) { top: -5%; right: 80%; animation: shooting 6.5s infinite ease-out 5s; }
+/* ease-out을 linear(일정한 속도)로 변경하여 중간에 멈칫거리지 않게 수정 */
+.shooting-star:nth-child(1) { top: -10%; right: -10%; animation: shooting 4.5s infinite linear 0s; }
+.shooting-star:nth-child(2) { top: 20%; right: -5%; animation: shooting 5.5s infinite linear 1.5s; }
+.shooting-star:nth-child(3) { top: -5%; right: 30%; animation: shooting 4s infinite linear 3s; }
+.shooting-star:nth-child(4) { top: 45%; right: -10%; animation: shooting 6s infinite linear 1s; }
+.shooting-star:nth-child(5) { top: -15%; right: 60%; animation: shooting 5s infinite linear 4.5s; }
+.shooting-star:nth-child(6) { top: 10%; right: 10%; animation: shooting 4.8s infinite linear 2.5s; }
+.shooting-star:nth-child(7) { top: -5%; right: 80%; animation: shooting 6.5s infinite linear 5s; }
 
 @keyframes shooting {
     0% {
-        /* translate3d로 GPU 강제 할당, scaleX로 꼬리가 길어지는 효과 구현 */
         transform: rotate(135deg) translate3d(0, 0, 0) scaleX(0);
         opacity: 0;
     }
@@ -122,12 +121,12 @@ body {
         opacity: 1;
         transform: rotate(135deg) translate3d(10vw, 0, 0) scaleX(1);
     }
-    60% {
+    70% {
         opacity: 1;
     }
     100% {
-        /* 끝까지 자연스럽게 이동하며 소멸 */
-        transform: rotate(135deg) translate3d(120vw, 0, 0) scaleX(0.7);
+        /* [핵심] 이동 거리를 120vw -> 250vw로 대폭 늘려 화면 밖으로 완전히 사라지게 함 */
+        transform: rotate(135deg) translate3d(250vw, 0, 0) scaleX(0.3);
         opacity: 0;
     }
 }

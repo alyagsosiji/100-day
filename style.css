@@ -19,7 +19,7 @@ body {
     overflow-x: hidden;
     min-height: 100vh;
     display: flex;
-    flex-direction: column; /* 푸터를 맨 밑으로 밀기 위함 */
+    flex-direction: column;
     
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -62,7 +62,7 @@ body {
 }
 
 /* =========================================
-   [2번 기능] 별똥별 애니메이션
+   [2번 기능] 별똥별 애니메이션 (업그레이드)
    ========================================= */
 .shooting-stars-container {
     position: fixed;
@@ -78,31 +78,64 @@ body {
 
 .shooting-star {
     position: absolute;
-    top: 0;
+    top: 50%;
     left: 50%;
-    width: 2px;
-    height: 80px;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
-    transform: rotate(-45deg);
+    width: 150px; /* 꼬리 길이 길게 */
+    height: 2px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 1), transparent);
+    /* 45도 방향(우상단 -> 좌하단)을 맞추기 위한 각도 */
+    transform: rotate(225deg);
     opacity: 0;
-    animation: shooting 4s infinite ease-in-out;
+    animation: shooting 3s infinite linear;
+    border-radius: 999px;
+    /* 별 머리 부분 빛남 효과 */
+    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 1));
 }
 
-.shooting-star:nth-child(1) { top: 10%; left: 80%; animation-delay: 0s; }
-.shooting-star:nth-child(2) { top: 25%; left: 40%; animation-delay: 1.5s; }
-.shooting-star:nth-child(3) { top: 5%; left: 20%; animation-delay: 2.8s; }
-.shooting-star:nth-child(4) { top: 40%; left: 90%; animation-delay: 3.8s; }
+/* 별 머리 만들기 */
+.shooting-star::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 15px 3px rgba(255, 255, 255, 0.8);
+}
+
+/* 다양한 크기와 속도, 위치 설정 */
+.shooting-star:nth-child(1) { top: -10%; left: 80%; animation-duration: 2.5s; animation-delay: 0s; width: 120px; }
+.shooting-star:nth-child(2) { top: -20%; left: 50%; animation-duration: 4s; animation-delay: 1.2s; width: 200px; }
+.shooting-star:nth-child(3) { top: 10%; left: 110%; animation-duration: 3s; animation-delay: 2.5s; width: 150px; }
+.shooting-star:nth-child(4) { top: 30%; left: 90%; animation-duration: 4.5s; animation-delay: 3.8s; width: 80px; }
+.shooting-star:nth-child(5) { top: 0%; left: 60%; animation-duration: 3.5s; animation-delay: 0.8s; width: 180px; }
 
 @keyframes shooting {
-    0% { transform: translate(0, 0) rotate(-45deg); opacity: 0; }
-    10% { opacity: 1; }
-    30% { transform: translate(-250px, 250px) rotate(-45deg); opacity: 0; }
-    100% { opacity: 0; }
+    0% {
+        transform: rotate(225deg) translateX(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    70% {
+        /* X축 방향으로 이동시킴 (회전된 상태이므로 대각선으로 이동) */
+        transform: rotate(225deg) translateX(-1000px);
+        opacity: 0;
+    }
+    100% {
+        transform: rotate(225deg) translateX(-1000px);
+        opacity: 0;
+    }
 }
 
 /* =========================================
-   [1번 기능] BGM 플레이어 버튼 (우측 상단)
+   나머지 기능 (BGM, 모달, 버튼, 카드 등) 기존 유지
    ========================================= */
+
 .bgm-player {
     position: fixed;
     top: 20px;
@@ -143,7 +176,6 @@ body {
     to { transform: rotate(360deg); }
 }
 
-/* 제목 등 나머지 스타일 (기존과 동일) */
 @keyframes naturalGlow {
     0% { text-shadow: 0 0 10px rgba(161, 140, 209, 0.3); transform: scale(1); }
     50% { text-shadow: 0 0 25px rgba(251, 194, 235, 0.8); transform: scale(1.02); }
@@ -193,7 +225,7 @@ header h1:hover {
     padding-bottom: 40px;
     position: relative;
     z-index: 1;
-    flex: 1; /* 푸터를 바닥으로 밀어내기 위함 */
+    flex: 1; 
 }
 
 .diary-card, .hidden-letter-section {
@@ -352,9 +384,6 @@ header h1:hover {
 .secret-letter p { font-size: 1rem; color: #e2e8f0; word-break: keep-all; }
 .secret-letter .signature { text-align: right; margin-top: 25px; font-weight: bold; color: #f6e58d; }
 
-/* =========================================
-   [추가] 푸터 디자인
-   ========================================= */
 .site-footer {
     text-align: center;
     padding: 30px 20px 40px;
@@ -372,7 +401,6 @@ header h1:hover {
     color: #a0aec0;
 }
 
-/* 라이트박스 및 TOP 버튼 유지 */
 .image-modal {
     display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100vw; height: 100vh;
     background-color: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
@@ -393,7 +421,6 @@ header h1:hover {
 .top-btn.show { opacity: 1; visibility: visible; }
 .top-btn:hover { background: rgba(161, 140, 209, 0.5); border-color: #fbc2eb; transform: translateY(-3px); }
 
-/* 모바일 전용 레이아웃 미세 조정 */
 @media (max-width: 480px) {
     header h1 { font-size: 2.1rem; }
     .diary-title { font-size: 1.3rem; }

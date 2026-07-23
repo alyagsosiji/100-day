@@ -4,15 +4,22 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent; 
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
     font-family: 'Pretendard', sans-serif;
     background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
     color: #e2e8f0;
-    padding: 20px;
+    padding: 20px 15px;
     overflow-x: hidden;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column; /* 푸터를 맨 밑으로 밀기 위함 */
     
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -21,7 +28,122 @@ body {
     -webkit-user-drag: none;
 }
 
-/* 제목 호버 애니메이션 (자연스러운 빛남) */
+/* =========================================
+   최적화 (별똥별) 토글 버튼 (좌측 상단)
+   ========================================= */
+.star-toggle-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    background: rgba(20, 25, 45, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #e2e8f0;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+    font-family: inherit;
+    font-weight: 500;
+}
+
+.star-toggle-btn.active {
+    border-color: rgba(246, 229, 141, 0.5);
+    color: #f6e58d;
+}
+
+.star-toggle-btn:hover {
+    transform: scale(1.05);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* =========================================
+   [2번 기능] 별똥별 애니메이션
+   ========================================= */
+.shooting-stars-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+    display: none; /* 스크립트에서 초기 제어 */
+}
+
+.shooting-star {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 2px;
+    height: 80px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+    transform: rotate(-45deg);
+    opacity: 0;
+    animation: shooting 4s infinite ease-in-out;
+}
+
+.shooting-star:nth-child(1) { top: 10%; left: 80%; animation-delay: 0s; }
+.shooting-star:nth-child(2) { top: 25%; left: 40%; animation-delay: 1.5s; }
+.shooting-star:nth-child(3) { top: 5%; left: 20%; animation-delay: 2.8s; }
+.shooting-star:nth-child(4) { top: 40%; left: 90%; animation-delay: 3.8s; }
+
+@keyframes shooting {
+    0% { transform: translate(0, 0) rotate(-45deg); opacity: 0; }
+    10% { opacity: 1; }
+    30% { transform: translate(-250px, 250px) rotate(-45deg); opacity: 0; }
+    100% { opacity: 0; }
+}
+
+/* =========================================
+   [1번 기능] BGM 플레이어 버튼 (우측 상단)
+   ========================================= */
+.bgm-player {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.bgm-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(20, 25, 45, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(246, 229, 141, 0.4);
+    color: #f6e58d;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+}
+
+.bgm-btn:hover {
+    transform: scale(1.08);
+    border-color: #f6e58d;
+    box-shadow: 0 0 15px rgba(246, 229, 141, 0.5);
+}
+
+.bgm-btn.playing {
+    animation: spinSlow 8s linear infinite;
+}
+
+@keyframes spinSlow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* 제목 등 나머지 스타일 (기존과 동일) */
 @keyframes naturalGlow {
     0% { text-shadow: 0 0 10px rgba(161, 140, 209, 0.3); transform: scale(1); }
     50% { text-shadow: 0 0 25px rgba(251, 194, 235, 0.8); transform: scale(1.02); }
@@ -30,12 +152,14 @@ body {
 
 header {
     text-align: center;
-    padding: 80px 0 50px 0;
+    padding: 70px 0 40px 0;
     margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
 }
 
 header h1 {
-    font-size: 2.8rem;
+    font-size: 2.5rem;
     margin-bottom: 15px;
     font-weight: 800;
     background: linear-gradient(to right, #a18cd1 0%, #fbc2eb 100%);
@@ -45,83 +169,79 @@ header h1 {
     cursor: default;
 }
 
-/* 마우스를 올렸을 때만 애니메이션 작동 */
 header h1:hover {
     animation: naturalGlow 2.5s infinite ease-in-out;
 }
 
-/* 디데이 카운터 */
 .dday-counter {
-    font-size: 1.15rem;
+    font-size: 1.05rem;
     color: #f6e58d;
-    letter-spacing: 1.5px;
+    letter-spacing: 1px;
     font-weight: 500;
     background: rgba(255, 255, 255, 0.05);
     display: inline-block;
-    padding: 10px 20px;
+    padding: 10px 18px;
     border-radius: 20px;
     border: 1px solid rgba(246, 229, 141, 0.2);
+    max-width: 90%;
+    word-break: keep-all;
 }
 
 .timeline {
     max-width: 600px;
     margin: 0 auto;
-    padding-bottom: 100px;
+    padding-bottom: 40px;
+    position: relative;
+    z-index: 1;
+    flex: 1; /* 푸터를 바닥으로 밀어내기 위함 */
 }
 
-/* 스크롤 페이드인 효과를 위한 기본 설정 */
 .diary-card, .hidden-letter-section {
     opacity: 0;
     transform: translateY(40px);
-    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), 
-                transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-/* JS에서 .visible 클래스가 붙으면 스르륵 나타남 */
 .diary-card.visible, .hidden-letter-section.visible {
     opacity: 1;
     transform: translateY(0);
 }
 
-/* 유리 질감 일기 카드 */
 .diary-card {
     background: rgba(20, 25, 45, 0.4);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     border-radius: 20px;
-    padding: 30px;
-    margin-bottom: 50px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 
-                inset 0 0 0 1px rgba(161, 140, 209, 0.2);
+    padding: 25px 20px;
+    margin-bottom: 40px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(161, 140, 209, 0.2);
 }
 
-/* 페이드인 완료 후 호버 효과 */
 .diary-card.visible:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8), 
-                inset 0 0 0 1px rgba(251, 194, 235, 0.4);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8), inset 0 0 0 1px rgba(251, 194, 235, 0.4);
     transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
 .diary-date {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     color: #f6e58d;
     margin-bottom: 10px;
-    letter-spacing: 2px;
+    letter-spacing: 1.5px;
 }
 
 .diary-title {
-    font-size: 1.6rem;
-    margin-bottom: 20px;
+    font-size: 1.45rem;
+    margin-bottom: 18px;
     font-weight: 700;
     color: #ffffff;
+    word-break: keep-all;
 }
 
-/* 이미지 영역 - 비율 맞춤 및 로딩 최적화 */
 .diary-img {
     width: 100%;
-    min-height: 250px; /* 로딩 전 카드가 찌그러지는 현상 방지 */
-    background: linear-gradient(135deg, #1b2735, #000000); /* 비어있을 때 우주색 배경 */
+    min-height: 220px;
+    background: linear-gradient(135deg, #1b2735, #000000);
     border-radius: 12px;
     margin-bottom: 20px;
     display: flex;
@@ -129,25 +249,20 @@ header h1:hover {
     justify-content: center;
     overflow: hidden;
     position: relative;
+    cursor: pointer;
 }
 
 .diary-img img {
     width: 100%;
-    height: auto; /* 원본 비율대로 자동 조정 */
+    height: auto;
     display: block;
-    pointer-events: none;
-    opacity: 0; /* 로딩 전 투명하게 숨김 */
-    transition: opacity 0.8s ease, transform 0.5s ease; /* 부드럽게 나타나게 */
+    pointer-events: auto;
+    opacity: 0;
+    transition: opacity 0.8s ease, transform 0.5s ease;
 }
 
-/* 자바스크립트가 로딩 완료를 감지하면 붙여주는 클래스 */
-.diary-img img.loaded {
-    opacity: 1; 
-}
-
-.diary-card:hover .diary-img img.loaded {
-    transform: scale(1.03);
-}
+.diary-img img.loaded { opacity: 1; }
+.diary-card:hover .diary-img img.loaded { transform: scale(1.02); }
 
 .diary-img span {
     color: #8892b0;
@@ -157,20 +272,22 @@ header h1:hover {
 }
 
 .desc-short {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     line-height: 1.6;
     margin-bottom: 15px;
     color: #e2e8f0;
+    word-break: keep-all;
 }
 
 .desc-long {
-    font-size: 1rem;
+    font-size: 0.95rem;
     line-height: 1.8;
     color: #a0aec0;
     max-height: 0;
     overflow: hidden;
     opacity: 0;
     transition: max-height 0.7s ease, opacity 0.7s ease, margin-top 0.4s ease;
+    word-break: keep-all;
 }
 
 .desc-long.active {
@@ -185,16 +302,16 @@ header h1:hover {
     background-color: rgba(246, 229, 141, 0.05);
     color: #f6e58d;
     border: 1px solid rgba(246, 229, 141, 0.4);
-    padding: 14px 20px;
+    padding: 13px 20px;
     border-radius: 30px;
     cursor: pointer;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 600;
     font-family: inherit;
     transition: all 0.3s ease;
     width: 100%;
     display: block;
-    margin-top: 20px;
+    margin-top: 18px;
 }
 
 .toggle-btn:hover {
@@ -203,93 +320,86 @@ header h1:hover {
     box-shadow: 0 0 15px rgba(246, 229, 141, 0.3);
 }
 
-/* 숨겨진 편지 영역 */
 .hidden-letter-section {
     background: rgba(0, 0, 0, 0.4);
     border-radius: 20px;
-    padding: 40px 30px;
+    padding: 35px 20px;
     text-align: center;
     border: 1px dashed rgba(255, 255, 255, 0.2);
-    margin-top: 50px;
+    margin-top: 40px;
 }
 
-.lock-screen h3 {
-    font-size: 1.3rem;
-    color: #fbc2eb;
-    margin-bottom: 10px;
-}
-
-.lock-screen p {
-    color: #a0aec0;
-    margin-bottom: 20px;
-    font-size: 0.95rem;
-}
-
+.lock-screen h3 { font-size: 1.25rem; color: #fbc2eb; margin-bottom: 10px; }
+.lock-screen p { color: #a0aec0; margin-bottom: 20px; font-size: 0.9rem; word-break: keep-all; }
 .lock-screen input {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: white;
-    padding: 12px;
-    border-radius: 8px;
-    text-align: center;
-    font-size: 1.1rem;
-    width: 150px;
-    letter-spacing: 3px;
-    outline: none;
-    font-family: 'Pretendard', sans-serif;
+    background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white; padding: 12px; border-radius: 8px; text-align: center; font-size: 1.1rem;
+    width: 130px; letter-spacing: 3px; outline: none; font-family: 'Pretendard', sans-serif;
 }
-
 .lock-screen button {
-    background: #a18cd1;
-    color: #fff;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 8px;
-    font-size: 1rem;
-    cursor: pointer;
-    margin-left: 10px;
-    font-weight: bold;
-    transition: background 0.3s ease;
+    background: #a18cd1; color: #fff; border: none; padding: 12px 20px;
+    border-radius: 8px; font-size: 0.95rem; cursor: pointer; margin-left: 8px;
+    font-weight: bold; transition: background 0.3s ease;
+}
+.lock-screen button:hover { background: #fbc2eb; color: #1b2735; }
+
+.secret-letter { display: none; text-align: left; line-height: 1.8; }
+.secret-letter.open { display: block; animation: fadeInLetter 1s ease forwards; }
+
+@keyframes fadeInLetter { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+.secret-letter h3 { font-size: 1.4rem; color: #fbc2eb; margin-bottom: 20px; border-bottom: 1px solid rgba(251, 194, 235, 0.3); padding-bottom: 10px; }
+.secret-letter p { font-size: 1rem; color: #e2e8f0; word-break: keep-all; }
+.secret-letter .signature { text-align: right; margin-top: 25px; font-weight: bold; color: #f6e58d; }
+
+/* =========================================
+   [추가] 푸터 디자인
+   ========================================= */
+.site-footer {
+    text-align: center;
+    padding: 30px 20px 40px;
+    color: #8892b0;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    margin-top: 40px;
 }
 
-.lock-screen button:hover {
-    background: #fbc2eb;
-    color: #1b2735;
+.site-footer .copyright {
+    margin-top: 8px;
+    color: #a0aec0;
 }
 
-/* 실제 편지 내용 (초기 숨김) */
-.secret-letter {
-    display: none;
-    text-align: left;
-    line-height: 1.8;
+/* 라이트박스 및 TOP 버튼 유지 */
+.image-modal {
+    display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100vw; height: 100vh;
+    background-color: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    justify-content: center; align-items: center; padding: 20px;
 }
+.image-modal.open { display: flex; animation: modalFadeIn 0.3s ease forwards; }
+@keyframes modalFadeIn { from { opacity: 0; } to { opacity: 1; } }
+.modal-content { max-width: 95%; max-height: 85vh; border-radius: 12px; box-shadow: 0 0 30px rgba(0, 0, 0, 0.8); object-fit: contain; }
+.modal-close { position: absolute; top: 20px; right: 25px; color: #ffffff; font-size: 35px; font-weight: bold; cursor: pointer; transition: color 0.2s ease; line-height: 1; z-index: 2001; }
+.modal-close:hover { color: #f6e58d; }
 
-.secret-letter.open {
-    display: block;
-    animation: fadeInLetter 1s ease forwards;
+.top-btn {
+    position: fixed; bottom: 25px; right: 20px; width: 44px; height: 44px; border-radius: 50%;
+    background: rgba(20, 25, 45, 0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2); color: #ffffff; font-size: 1.1rem; cursor: pointer;
+    opacity: 0; visibility: hidden; transition: all 0.3s ease; z-index: 1000; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
+.top-btn.show { opacity: 1; visibility: visible; }
+.top-btn:hover { background: rgba(161, 140, 209, 0.5); border-color: #fbc2eb; transform: translateY(-3px); }
 
-@keyframes fadeInLetter {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
-}
-
-.secret-letter h3 {
-    font-size: 1.5rem;
-    color: #fbc2eb;
-    margin-bottom: 20px;
-    border-bottom: 1px solid rgba(251, 194, 235, 0.3);
-    padding-bottom: 10px;
-}
-
-.secret-letter p {
-    font-size: 1.05rem;
-    color: #e2e8f0;
-}
-
-.secret-letter .signature {
-    text-align: right;
-    margin-top: 30px;
-    font-weight: bold;
-    color: #f6e58d;
+/* 모바일 전용 레이아웃 미세 조정 */
+@media (max-width: 480px) {
+    header h1 { font-size: 2.1rem; }
+    .diary-title { font-size: 1.3rem; }
+    .diary-card { padding: 20px 15px; }
+    .lock-screen input { width: 100px; font-size: 1rem; }
+    .bgm-player { top: 15px; right: 15px; }
+    .star-toggle-btn { top: 15px; left: 15px; padding: 6px 12px; font-size: 0.8rem; }
+    .top-btn { bottom: 20px; right: 15px; }
 }

@@ -5,17 +5,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const starToggleBtn = document.getElementById('star-toggle-btn');
     const starStatus = document.getElementById('star-status');
 
-    // 모바일(화면 너비 768px 이하)일 때 true(ON), 데스크탑일 때 false(OFF)
+    // 모바일(768px 이하)일 때 false(OFF), 데스크탑일 때 true(ON)
     let isMobile = window.innerWidth <= 768;
-    let starsActive = isMobile ? true : false; 
+    let starsActive = isMobile ? false : true; 
 
     function updateStarUI() {
         if (starsActive) {
-            starContainer.style.display = 'block'; // 별똥별 보이기
+            starContainer.style.display = 'block';
             if(starStatus) starStatus.innerText = 'ON';
             if(starToggleBtn) starToggleBtn.classList.add('active');
         } else {
-            starContainer.style.display = 'none'; // 별똥별 숨기기 (이전 단색/그라데이션 배경으로 돌아감)
+            starContainer.style.display = 'none';
             if(starStatus) starStatus.innerText = 'OFF';
             if(starToggleBtn) starToggleBtn.classList.remove('active');
         }
@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cardImages.forEach(img => {
         img.addEventListener('click', (e) => {
-            e.stopPropagation(); // 카드 이벤트 전파 방지
+            e.stopPropagation();
             if (imageModal && modalImg) {
                 modalImg.src = img.src;
                 imageModal.classList.add('open');
@@ -101,7 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 모달 닫기 (X 버튼 또는 배경 클릭 시)
     if (imageModal) {
         imageModal.addEventListener('click', () => {
             imageModal.classList.remove('open');
@@ -184,14 +183,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // [기존 유지] 보안 기능: 마우스 우클릭, 드래그, 텍스트 선택 방지
+    // [기존 유지] 보안 기능
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.addEventListener('dragstart', e => e.preventDefault());
     document.addEventListener('selectstart', e => e.preventDefault());
 
-    // [기존 유지] 보안 기능: 키보드 단축키(개발자 도구 등) 차단
     document.addEventListener('keydown', function(event) {
-        if (event.keyCode === 123) { // F12
+        if (event.keyCode === 123) {
             event.preventDefault();
             return false;
         }
@@ -199,11 +197,11 @@ document.addEventListener('DOMContentLoaded', () => {
             event.preventDefault();
             return false;
         }
-        if (event.ctrlKey && event.keyCode === 85) { // Ctrl+U
+        if (event.ctrlKey && event.keyCode === 85) { 
             event.preventDefault();
             return false;
         }
-        if (event.ctrlKey && event.keyCode === 83) { // Ctrl+S
+        if (event.ctrlKey && event.keyCode === 83) { 
             event.preventDefault();
             return false;
         }

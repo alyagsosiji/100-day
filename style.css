@@ -69,7 +69,7 @@ header h1:hover {
     padding-bottom: 100px;
 }
 
-/* 스크롤 페이드인 효과를 위한 기본 설정 (투명하고 아래로 내려가 있음) */
+/* 스크롤 페이드인 효과를 위한 기본 설정 */
 .diary-card, .hidden-letter-section {
     opacity: 0;
     transform: translateY(40px);
@@ -95,7 +95,7 @@ header h1:hover {
                 inset 0 0 0 1px rgba(161, 140, 209, 0.2);
 }
 
-/* 페이드인 완료 후 호버 효과 (transform 겹침 방지) */
+/* 페이드인 완료 후 호버 효과 */
 .diary-card.visible:hover {
     transform: translateY(-8px);
     box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8), 
@@ -117,10 +117,11 @@ header h1:hover {
     color: #ffffff;
 }
 
+/* 이미지 영역 - 비율 맞춤 및 로딩 최적화 */
 .diary-img {
     width: 100%;
-    height: 350px;
-    background: linear-gradient(135deg, #2c3e50, #000000);
+    min-height: 250px; /* 로딩 전 카드가 찌그러지는 현상 방지 */
+    background: linear-gradient(135deg, #1b2735, #000000); /* 비어있을 때 우주색 배경 */
     border-radius: 12px;
     margin-bottom: 20px;
     display: flex;
@@ -132,13 +133,19 @@ header h1:hover {
 
 .diary-img img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto; /* 원본 비율대로 자동 조정 */
+    display: block;
     pointer-events: none;
-    transition: transform 0.5s ease;
+    opacity: 0; /* 로딩 전 투명하게 숨김 */
+    transition: opacity 0.8s ease, transform 0.5s ease; /* 부드럽게 나타나게 */
 }
 
-.diary-card:hover .diary-img img {
+/* 자바스크립트가 로딩 완료를 감지하면 붙여주는 클래스 */
+.diary-img img.loaded {
+    opacity: 1; 
+}
+
+.diary-card:hover .diary-img img.loaded {
     transform: scale(1.03);
 }
 
@@ -146,6 +153,7 @@ header h1:hover {
     color: #8892b0;
     font-size: 0.9rem;
     position: absolute;
+    z-index: 0;
 }
 
 .desc-short {

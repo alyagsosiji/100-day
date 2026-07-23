@@ -62,7 +62,7 @@ body {
 }
 
 /* =========================================
-   [2번 기능] 별똥별 애니메이션 (업그레이드)
+   [2번 기능] 별똥별 애니메이션 (전체 화면 & 자연스러움 극대화)
    ========================================= */
 .shooting-stars-container {
     position: fixed;
@@ -73,65 +73,69 @@ body {
     pointer-events: none;
     z-index: 0;
     overflow: hidden;
-    display: none; /* 스크립트에서 초기 제어 */
+    display: none; /* 스크립트에서 제어 */
 }
 
 .shooting-star {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 150px; /* 꼬리 길이 길게 */
     height: 2px;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 1), transparent);
-    /* 45도 방향(우상단 -> 좌하단)을 맞추기 위한 각도 */
-    transform: rotate(225deg);
+    /* 꼬리(왼쪽)는 투명하고, 머리(오른쪽)는 하얗게 설정 */
+    background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+    /* 135도 회전: 우측을 향하던 별을 우측상단->좌측하단 방향으로 틀어줌 */
+    transform: rotate(135deg);
     opacity: 0;
-    animation: shooting 3s infinite linear;
-    border-radius: 999px;
-    /* 별 머리 부분 빛남 효과 */
-    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 1));
 }
 
-/* 별 머리 만들기 */
+/* 별 머리의 반짝이는 빛 효과 */
 .shooting-star::before {
     content: '';
     position: absolute;
     top: 50%;
+    right: 0; /* 머리를 이동 방향의 선두에 배치 */
     transform: translateY(-50%);
-    left: 0;
     width: 4px;
     height: 4px;
     border-radius: 50%;
     background: #fff;
-    box-shadow: 0 0 15px 3px rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 15px 3px rgba(255, 255, 255, 0.9), 
+                0 0 30px 6px rgba(161, 140, 209, 0.7);
 }
 
-/* 다양한 크기와 속도, 위치 설정 */
-.shooting-star:nth-child(1) { top: -10%; left: 80%; animation-duration: 2.5s; animation-delay: 0s; width: 120px; }
-.shooting-star:nth-child(2) { top: -20%; left: 50%; animation-duration: 4s; animation-delay: 1.2s; width: 200px; }
-.shooting-star:nth-child(3) { top: 10%; left: 110%; animation-duration: 3s; animation-delay: 2.5s; width: 150px; }
-.shooting-star:nth-child(4) { top: 30%; left: 90%; animation-duration: 4.5s; animation-delay: 3.8s; width: 80px; }
-.shooting-star:nth-child(5) { top: 0%; left: 60%; animation-duration: 3.5s; animation-delay: 0.8s; width: 180px; }
+/* 화면 전체를 가로지르도록 상단(top)과 우측(right) 위주로 다양하게 배치 */
+.shooting-star:nth-child(1) { top: -10%; right: -10%; animation: shooting 3.5s infinite linear 0s; }
+.shooting-star:nth-child(2) { top: 20%; right: -5%; animation: shooting 4.2s infinite linear 1.2s; }
+.shooting-star:nth-child(3) { top: -5%; right: 30%; animation: shooting 3s infinite linear 2.5s; }
+.shooting-star:nth-child(4) { top: 45%; right: -10%; animation: shooting 4.5s infinite linear 0.8s; }
+.shooting-star:nth-child(5) { top: -15%; right: 60%; animation: shooting 3.8s infinite linear 3.1s; }
+/* 별이 풍성해 보이도록 2개 추가 */
+.shooting-star:nth-child(6) { top: 10%; right: 10%; animation: shooting 3.2s infinite linear 1.8s; }
+.shooting-star:nth-child(7) { top: -5%; right: 80%; animation: shooting 4s infinite linear 4.5s; }
 
 @keyframes shooting {
     0% {
-        transform: rotate(225deg) translateX(0);
+        transform: rotate(135deg) translateX(0);
         opacity: 0;
+        width: 0px;
     }
-    10% {
+    5% {
+        opacity: 1;
+        width: 150px; /* 꼬리가 스르륵 길어짐 */
+    }
+    30% {
         opacity: 1;
     }
     70% {
-        /* X축 방향으로 이동시킴 (회전된 상태이므로 대각선으로 이동) */
-        transform: rotate(225deg) translateX(-1000px);
+        /* 150vw(화면 너비의 1.5배)만큼 이동시켜 화면을 완전히 벗어나게 함 */
+        transform: rotate(135deg) translateX(150vw);
         opacity: 0;
+        width: 0px; /* 사라질 때 꼬리가 짧아지며 자연스럽게 소멸 */
     }
     100% {
-        transform: rotate(225deg) translateX(-1000px);
+        transform: rotate(135deg) translateX(150vw);
         opacity: 0;
+        width: 0px;
     }
 }
-
 /* =========================================
    나머지 기능 (BGM, 모달, 버튼, 카드 등) 기존 유지
    ========================================= */

@@ -24,19 +24,22 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateStarUI() {
         if (starsActive) {
             starContainer.style.display = 'block';
-            starStatus.innerText = 'ON';
-            starToggleBtn.classList.add('active');
+            if (starStatus) starStatus.innerText = 'ON';
+            if (starToggleBtn) starToggleBtn.classList.add('active');
         } else {
             starContainer.style.display = 'none';
-            starStatus.innerText = 'OFF';
-            starToggleBtn.classList.remove('active');
+            if (starStatus) starStatus.innerText = 'OFF';
+            if (starToggleBtn) starToggleBtn.classList.remove('active');
         }
     }
     updateStarUI();
-    starToggleBtn.addEventListener('click', () => {
-        starsActive = !starsActive;
-        updateStarUI();
-    });
+    
+    if (starToggleBtn) {
+        starToggleBtn.addEventListener('click', () => {
+            starsActive = !starsActive;
+            updateStarUI();
+        });
+    }
 
     // [디데이 카운터] 2026-04-16 기준
     const startDate = new Date("2026-04-16T00:00:00");
@@ -46,7 +49,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
         const minutes = Math.floor((diff / (1000 * 60)) % 60);
         const seconds = Math.floor((diff / 1000) % 60);
-        document.getElementById("dday-text").innerText = `❤ ${days}일 ${hours}시간 ${minutes}분 ${seconds}초`;
+        const ddayText = document.getElementById("dday-text");
+        if (ddayText) {
+            ddayText.innerText = `❤ ${days}일 ${hours}시간 ${minutes}분 ${seconds}초`;
+        }
     }
     setInterval(updateDDay, 1000);
     updateDDay();
@@ -58,26 +64,30 @@ document.addEventListener('DOMContentLoaded', () => {
         else img.addEventListener('load', () => img.classList.add('loaded'));
     });
 
-    // [Intersection Observer] 스크롤 페이드인
+    // [스크롤 애니메이션] 카드 및 연결선(.timeline-connector) 페이드인
     const observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
             if (entry.isIntersecting) entry.target.classList.add('visible');
         });
     }, { threshold: 0.1 });
-    document.querySelectorAll('.diary-card, .hidden-letter-section').forEach(el => observer.observe(el));
+    
+    // 카드와 연결선 모두 감시 대상에 포함
+    document.querySelectorAll('.diary-card, .hidden-letter-section, .timeline-connector').forEach(el => observer.observe(el));
 
     // [BGM 제어]
     const bgm = document.getElementById('bgm-audio');
     const bgmBtn = document.getElementById('bgm-toggle-btn');
-    bgmBtn.addEventListener('click', () => {
-        if (bgm.paused) {
-            bgm.play();
-            bgmBtn.classList.add('playing');
-        } else {
-            bgm.pause();
-            bgmBtn.classList.remove('playing');
-        }
-    });
+    if (bgmBtn && bgm) {
+        bgmBtn.addEventListener('click', () => {
+            if (bgm.paused) {
+                bgm.play();
+                bgmBtn.classList.add('playing');
+            } else {
+                bgm.pause();
+                bgmBtn.classList.remove('playing');
+            }
+        });
+    }
 
     // [토글 버튼] 자세히 보기
     document.querySelectorAll('.toggle-btn').forEach(btn => {
@@ -93,21 +103,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalImg = document.getElementById('modal-img');
     images.forEach(img => {
         img.addEventListener('click', () => {
-            modalImg.src = img.src;
-            modal.classList.add('open');
+            if (modalImg && modal) {
+                modalImg.src = img.src;
+                modal.classList.add('open');
+            }
         });
     });
-    modal.addEventListener('click', () => modal.classList.remove('open'));
+    if (modal) {
+        modal.addEventListener('click', () => modal.classList.remove('open'));
+    }
 
     // [비밀번호 편지] 0114 / 0416
     const unlockBtn = document.getElementById('unlock-btn');
-    unlockBtn.addEventListener('click', () => {
-        const pw = document.getElementById('letter-password').value;
-        if (pw === '0114' || pw === '0416') {
-            document.getElementById('lock-screen').style.display = 'none';
-            document.getElementById('secret-letter').classList.add('open');
-        } else alert('비밀번호가 틀렸어!');
-    });
+    if (unlockBtn) {
+        unlockBtn.addEventListener('click', () => {
+            const pw = document.getElementById('letter-password').value;
+            if (pw === '0114' || pw === '0416') {
+                document.getElementById('lock-screen').style.display = 'none';
+                document.getElementById('secret-letter').classList.add('open');
+            } else {
+                alert('비밀번호가 틀렸어!');
+            }
+        });
+    }
+    
+    const pwInput = document.getElementById('letter-password');
+    if (pwInput) {
+        pwInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') unlockBtn.click();
+        });
+    }
 
     // [TOP 버튼]
     const topBtn = document.getElementById('top-btn');
@@ -115,5 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (window.scrollY > 500) topBtn.classList.add('show');
         else topBtn.classList.remove('show');
     });
-    topBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    if (topBtn) {
+        topBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    }
 });

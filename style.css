@@ -14,7 +14,6 @@ html {
 
 body {
     font-family: 'Pretendard', sans-serif;
-    /* [핵심] 첫 화면 은하수 배경 */
     background: #090a0f radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
     color: #e2e8f0;
     overflow-x: hidden;
@@ -22,14 +21,13 @@ body {
     display: flex;
     flex-direction: column;
     
-    /* 보안: 드래그 금지 */
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
 }
 
-/* [별똥별 애니메이션 - GPU 최적화] */
+/* [별똥별 애니메이션] */
 .shooting-stars-container {
     position: fixed;
     top: 0;
@@ -64,7 +62,6 @@ body {
     box-shadow: 0 0 15px 3px white, 0 0 30px 6px rgba(161, 140, 209, 0.7);
 }
 
-/* 별똥별 경로 설정 */
 .shooting-star:nth-child(1) { top: -10%; right: -10%; animation: shooting 4.5s infinite linear 0s; }
 .shooting-star:nth-child(2) { top: 20%; right: -5%; animation: shooting 5.5s infinite linear 1.5s; }
 .shooting-star:nth-child(3) { top: -5%; right: 30%; animation: shooting 4s infinite linear 3s; }
@@ -80,27 +77,31 @@ body {
     100% { transform: rotate(135deg) translate3d(250vw, 0, 0) scaleX(0.3); opacity: 0; }
 }
 
-/* [UI 버튼류] */
+/* [UI 버튼류 및 호버 복구] */
 .star-toggle-btn {
     position: fixed; top: 20px; left: 20px; z-index: 1000;
     background: rgba(20, 25, 45, 0.6); backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2); color: #e2e8f0;
     padding: 8px 15px; border-radius: 20px; font-size: 0.85rem; cursor: pointer;
+    transition: all 0.3s ease; /* 호버 복구 */
 }
 .star-toggle-btn.active { color: #f6e58d; border-color: #f6e58d; }
+.star-toggle-btn:hover { transform: scale(1.05); background: rgba(255, 255, 255, 0.1); } /* 호버 복구 */
 
 .bgm-player { position: fixed; top: 20px; right: 20px; z-index: 1000; }
 .bgm-btn {
     width: 40px; height: 40px; border-radius: 50%; background: rgba(20, 25, 45, 0.6);
     backdrop-filter: blur(10px); border: 1px solid rgba(246, 229, 141, 0.4); color: #f6e58d;
     display: flex; align-items: center; justify-content: center; cursor: pointer;
+    transition: all 0.3s ease; /* 호버 복구 */
 }
+.bgm-btn:hover { transform: scale(1.08); border-color: #f6e58d; box-shadow: 0 0 15px rgba(246, 229, 141, 0.5); } /* 호버 복구 */
 .bgm-btn.playing { animation: spinSlow 8s linear infinite; }
 @keyframes spinSlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-/* [헤더 디자인] */
+/* [헤더] */
 header {
-    height: 100vh; /* 첫 화면 전체를 은하수로 채움 */
+    height: 100vh; /* 화면 꽉 차게 */
     display: flex; align-items: center; justify-content: center;
     text-align: center; position: relative; z-index: 1;
 }
@@ -123,7 +124,48 @@ header h1:hover { animation: naturalGlow 2.5s infinite; }
     border: 1px solid rgba(246, 229, 141, 0.2);
 }
 
-/* [타임라인 카드 디자인] */
+/* [별빛 일자 줄 (스크롤 유도 및 카드 간격)] */
+.starlight-line {
+    width: 2px;
+    height: 35px;
+    margin: 10px 0 18px 10px;
+    background: linear-gradient(to bottom, rgba(161, 140, 209, 0.1), #a18cd1, #fbc2eb, #f6e58d, rgba(246, 229, 141, 0.1));
+    box-shadow: 0 0 8px rgba(251, 194, 235, 0.6), 0 0 12px rgba(161, 140, 209, 0.4);
+    border-radius: 2px;
+    position: relative;
+}
+
+/* 헤더 전용 긴 별빛 줄 (스크롤 유도) */
+.header-line {
+    position: absolute;
+    bottom: 40px; /* 화면 하단에 위치 */
+    left: 50%;
+    transform: translateX(-50%);
+    height: 80px; 
+    margin: 0;
+}
+
+.starlight-line::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -2px;
+    width: 6px;
+    height: 6px;
+    background: #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 0 10px 2px #ffffff, 0 0 15px 4px #fbc2eb;
+    animation: starlightDrop 2.5s infinite ease-in-out;
+}
+
+@keyframes starlightDrop {
+    0% { top: 0%; opacity: 0; }
+    25% { opacity: 1; }
+    75% { opacity: 1; }
+    100% { top: 100%; opacity: 0; }
+}
+
+/* [타임라인 카드] */
 .timeline { max-width: 600px; margin: 0 auto; padding: 20px 15px 100px; position: relative; z-index: 1; }
 
 .diary-card, .hidden-letter-section {
@@ -138,21 +180,28 @@ header h1:hover { animation: naturalGlow 2.5s infinite; }
     box-shadow: 0 10px 40px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.1);
 }
 
-.diary-title { font-size: 1.5rem; margin-bottom: 20px; color: #fff; word-break: keep-all; }
+.diary-card.visible:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8), inset 0 0 0 1px rgba(251, 194, 235, 0.4);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
 
-/* [이미지 영역 및 최적화] */
+.diary-date { font-size: 0.9rem; color: #f6e58d; margin-bottom: 8px; letter-spacing: 1px; }
+
+.diary-title { font-size: 1.5rem; margin-bottom: 12px; color: #fff; word-break: keep-all; }
+
+/* [이미지 영역] */
 .diary-img {
     width: 100%; min-height: 220px; background: #000; border-radius: 12px;
     margin-bottom: 20px; overflow: hidden; position: relative;
     display: flex; align-items: center; justify-content: center; cursor: pointer;
-    transform: translateZ(0); /* GPU 가속 */
+    transform: translateZ(0);
 }
 
 .diary-img img {
     width: 100%; height: auto; display: block; opacity: 0;
     transition: opacity 0.8s ease, transform 0.5s ease;
     will-change: opacity, transform;
-    /* 네모 박스 방지 */
     color: transparent; font-size: 0; border: none;
 }
 .diary-img img.loaded { opacity: 1; }
@@ -160,18 +209,21 @@ header h1:hover { animation: naturalGlow 2.5s infinite; }
 
 .diary-img span { color: #555; font-size: 0.9rem; position: absolute; }
 
-/* [버튼 및 기타] */
-.toggle-btn {
-    width: 100%; padding: 14px; margin-top: 20px; border-radius: 30px;
-    background: rgba(246, 229, 141, 0.05); color: #f6e58d;
-    border: 1px solid rgba(246, 229, 141, 0.4); cursor: pointer; font-weight: 600;
-}
+.desc-short { font-size: 1.05rem; line-height: 1.6; color: #e2e8f0; margin-bottom: 15px; word-break: keep-all; }
 
 .desc-long {
     max-height: 0; overflow: hidden; opacity: 0; line-height: 1.8; color: #a0aec0;
     transition: all 0.6s ease;
 }
 .desc-long.active { max-height: 1000px; opacity: 1; margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
+
+.toggle-btn {
+    width: 100%; padding: 14px; margin-top: 20px; border-radius: 30px;
+    background: rgba(246, 229, 141, 0.05); color: #f6e58d;
+    border: 1px solid rgba(246, 229, 141, 0.4); cursor: pointer; font-weight: 600;
+    transition: all 0.3s ease; /* 호버 복구 */
+}
+.toggle-btn:hover { background-color: rgba(246, 229, 141, 0.15); border-color: #f6e58d; box-shadow: 0 0 15px rgba(246, 229, 141, 0.3); } /* 호버 복구 */
 
 /* [숨겨진 편지] */
 .hidden-letter-section {
@@ -184,7 +236,9 @@ header h1:hover { animation: naturalGlow 2.5s infinite; }
 }
 .lock-screen button {
     padding: 12px 20px; border-radius: 8px; background: #a18cd1; color: #fff; border: none; cursor: pointer;
+    transition: background 0.3s ease; /* 호버 복구 */
 }
+.lock-screen button:hover { background: #fbc2eb; color: #1b2735; } /* 호버 복구 */
 .secret-letter { display: none; text-align: left; animation: modalFadeIn 0.8s ease forwards; }
 .secret-letter.open { display: block; }
 .secret-letter h3 { color: #fbc2eb; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
@@ -196,18 +250,19 @@ header h1:hover { animation: naturalGlow 2.5s infinite; }
 }
 .image-modal.open { display: flex; }
 .modal-content { max-width: 90%; max-height: 80vh; border-radius: 10px; }
-.modal-close { position: absolute; top: 30px; right: 30px; color: #fff; font-size: 2rem; cursor: pointer; }
+.modal-close { position: absolute; top: 30px; right: 30px; color: #fff; font-size: 2rem; cursor: pointer; transition: color 0.2s ease; }
+.modal-close:hover { color: #f6e58d; } /* 호버 유지 */
 
 .top-btn {
     position: fixed; bottom: 30px; right: 20px; width: 45px; height: 45px; border-radius: 50%;
     background: rgba(20, 25, 45, 0.8); color: #fff; border: 1px solid rgba(255,255,255,0.2);
-    opacity: 0; visibility: hidden; transition: 0.3s; z-index: 1000;
+    opacity: 0; visibility: hidden; transition: all 0.3s ease; z-index: 1000; cursor: pointer;
 }
 .top-btn.show { opacity: 1; visibility: visible; }
+.top-btn:hover { background: rgba(161, 140, 209, 0.5); border-color: #fbc2eb; transform: translateY(-3px); } /* 호버 복구 */
 
 .site-footer { padding: 40px 20px; text-align: center; color: #666; font-size: 0.8rem; border-top: 1px solid rgba(255,255,255,0.05); }
 
-/* [모바일 최적화] */
 @media (max-width: 768px) {
     header h1 { font-size: 2.2rem; }
     .timeline { padding-top: 0; }

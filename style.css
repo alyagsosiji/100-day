@@ -239,7 +239,9 @@ header h1:hover { animation: naturalGlow 2.5s infinite; }
 /* [이미지 영역] */
 .diary-img {
     width: 100%; min-height: 220px; background: #000; border-radius: 12px;
-    margin-bottom: 20px; overflow: hidden; position: relative;
+    /* [수정] 아래 여백 제거 (desc-short에서 위아래 여백을 통합 관리하기 위함) */
+    margin-bottom: 0; 
+    overflow: hidden; position: relative;
     display: flex; align-items: center; justify-content: center; cursor: pointer;
     transform: translateZ(0);
 }
@@ -250,41 +252,57 @@ header h1:hover { animation: naturalGlow 2.5s infinite; }
     will-change: opacity, transform;
     color: transparent; font-size: 0; border: none;
     position: relative;
-    z-index: 1; /* 이미지가 글자 위로 오도록 설정 */
+    z-index: 1;
 }
 .diary-img img.loaded { opacity: 1; }
 .diary-card:hover .diary-img img.loaded { transform: scale(1.02); }
 
-/* 로딩 중 글자 기본 상태 */
 .diary-img span { 
-    color: #555; 
-    font-size: 0.9rem; 
-    position: absolute; 
-    z-index: 0; /* 글자는 이미지 뒤에 위치 */
+    color: #555; font-size: 0.9rem; position: absolute; z-index: 0;
     transition: opacity 0.5s ease, visibility 0.5s ease;
 }
+.diary-img img.loaded + span { opacity: 0; visibility: hidden; }
 
-/* [핵심 해결] 이미지가 로딩 완료(loaded)되면 바로 뒤의 span(글자)을 투명하게 숨김 */
-.diary-img img.loaded + span {
-    opacity: 0;
-    visibility: hidden;
+/* =========================================
+   [텍스트 및 버튼 영역 여백 완벽 맞춤]
+   ========================================= */
+
+/* 짧은 설명: 위, 아래 여백을 똑같이 20px로 맞춤 */
+.desc-short { 
+    font-size: 1.05rem; 
+    line-height: 1.6; 
+    color: #e2e8f0; 
+    margin: 20px 0; /* 위 20px, 아래 20px 동일하게 적용 */
+    word-break: keep-all; 
 }
 
-.desc-short { font-size: 1.05rem; line-height: 1.6; color: #e2e8f0; margin-bottom: 14px; word-break: keep-all; }
-
+/* 긴 설명 (자세히 보기 내용) */
 .desc-long {
     max-height: 0; overflow: hidden; opacity: 0; line-height: 1.8; color: #a0aec0;
     transition: all 0.6s ease;
 }
-.desc-long.active { max-height: 1000px; opacity: 1; margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
+.desc-long.active { 
+    max-height: 1000px; 
+    opacity: 1; 
+    margin-top: 0; /* 겹침 방지를 위해 마진 0 */
+    padding-top: 20px; 
+    border-top: 1px solid rgba(255,255,255,0.1); 
+}
 
+/* 자세히 보기 버튼 */
 .toggle-btn {
-    width: 100%; padding: 14px; margin-top: 20px; border-radius: 30px;
+    width: 100%; padding: 14px; 
+    margin-top: 20px; /* 긴 설명이나 짧은 설명과의 간격을 20px로 동일하게 유지 */
+    border-radius: 30px;
     background: rgba(246, 229, 141, 0.05); color: #f6e58d;
     border: 1px solid rgba(246, 229, 141, 0.4); cursor: pointer; font-weight: 600;
     transition: all 0.3s ease;
 }
-.toggle-btn:hover { background-color: rgba(246, 229, 141, 0.15); border-color: #f6e58d; box-shadow: 0 0 15px rgba(246, 229, 141, 0.3); }
+.toggle-btn:hover { 
+    background-color: rgba(246, 229, 141, 0.15); 
+    border-color: #f6e58d; 
+    box-shadow: 0 0 15px rgba(246, 229, 141, 0.3); 
+}
 
 /* [숨겨진 편지] */
 .hidden-letter-section {

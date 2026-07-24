@@ -270,7 +270,7 @@ header h1:hover { animation: naturalGlow 2.5s infinite; }
     visibility: hidden;
 }
 
-.desc-short { font-size: 1.05rem; line-height: 1.6; color: #e2e8f0; margin-bottom: 15px; word-break: keep-all; }
+.desc-short { font-size: 1.05rem; line-height: 1.6; color: #e2e8f0; margin-bottom: 14px; word-break: keep-all; }
 
 .desc-long {
     max-height: 0; overflow: hidden; opacity: 0; line-height: 1.8; color: #a0aec0;

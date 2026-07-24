@@ -62,7 +62,6 @@ body {
     box-shadow: 0 0 15px 3px white, 0 0 30px 6px rgba(161, 140, 209, 0.7);
 }
 
-/* 별똥별이 더 풍성하게 나오도록 조정 */
 .shooting-star:nth-child(1) { top: -10%; right: -10%; animation: shooting 4.5s infinite linear 0s; }
 .shooting-star:nth-child(2) { top: 20%; right: -5%; animation: shooting 5.5s infinite linear 1.5s; }
 .shooting-star:nth-child(3) { top: -5%; right: 30%; animation: shooting 4s infinite linear 3s; }
@@ -131,12 +130,15 @@ header h1:hover { animation: naturalGlow 2.5s infinite; }
     border: 1px solid rgba(246, 229, 141, 0.2);
 }
 
-/* [별빛 일자 줄 공통] */
+/* =========================================
+   [별빛 일자 줄 효과 및 속도 최적화]
+   ========================================= */
 .starlight-line, .timeline-connector {
     width: 2px;
     position: relative;
     border-radius: 2px;
 }
+
 .starlight-line::after, .timeline-connector::after {
     content: '';
     position: absolute;
@@ -147,8 +149,24 @@ header h1:hover { animation: naturalGlow 2.5s infinite; }
     background: #ffffff;
     border-radius: 50%;
     box-shadow: 0 0 10px 2px #ffffff, 0 0 15px 4px #fbc2eb;
+}
+
+/* 1. 카드 안쪽 짧은 선 애니메이션 (아주 빠르게 슉! 내려감) */
+.starlight-line:not(.header-line)::after {
+    animation: starlightDrop 1.2s infinite ease-in-out;
+}
+
+/* 2. 카드 사이 연결 선 애니메이션 (적당한 속도로 내려감) */
+.timeline-connector::after {
+    animation: starlightDrop 1.8s infinite ease-in-out;
+}
+
+/* 3. 헤더 아래 긴 선 애니메이션 (길이에 맞춰 부드럽게) */
+.header-line::after {
     animation: starlightDrop 2.5s infinite ease-in-out;
 }
+
+/* 별빛 떨어지는 키프레임 */
 @keyframes starlightDrop {
     0% { top: 0%; opacity: 0; }
     25% { opacity: 1; }
@@ -156,7 +174,7 @@ header h1:hover { animation: naturalGlow 2.5s infinite; }
     100% { top: 100%; opacity: 0; }
 }
 
-/* 카드 내부에 있는 작은 선 */
+/* 카드 내부에 있는 작은 선 기본 스타일 */
 .starlight-line:not(.header-line) {
     height: 35px;
     margin: 10px 0 18px 10px;
@@ -164,24 +182,23 @@ header h1:hover { animation: naturalGlow 2.5s infinite; }
     box-shadow: 0 0 8px rgba(251, 194, 235, 0.6), 0 0 12px rgba(161, 140, 209, 0.4);
 }
 
-/* [수정 완벽 적용] 제목 아래 화면 끝까지 떨어지는 긴 별빛 선 */
+/* 제목 아래 화면 끝까지 떨어지는 긴 별빛 선 (유지) */
 .header-line {
     position: absolute;
     bottom: 0; 
     left: 50%;
     transform: translateX(-50%);
-    /* 높이를 화면 비율 30%로 주어 짧아 보이지 않게 길게 설정 */
-    height: 30vh; 
+    height: 40vh; 
     min-height: 180px; 
     margin: 0;
     background: linear-gradient(to bottom, transparent, rgba(161, 140, 209, 0.5), #a18cd1, #fbc2eb);
     box-shadow: 0 0 15px rgba(251, 194, 235, 0.6);
 }
 
-/* [추가 완벽 적용] 카드와 카드를 잇는 연결 선 */
+/* 카드와 카드를 잇는 연결 선 (유지) */
 .timeline-connector {
-    height: 80px; /* 카드를 확실히 이어주도록 높이 설정 */
-    margin: -10px auto 30px auto; /* 카드 사이 간격 매끄럽게 연결 */
+    height: 80px; 
+    margin: -10px auto 30px auto; 
     background: linear-gradient(to bottom, rgba(161, 140, 209, 0.1), #a18cd1, #fbc2eb, rgba(251, 194, 235, 0.1));
     box-shadow: 0 0 10px rgba(161, 140, 209, 0.6);
     opacity: 0;
@@ -205,7 +222,7 @@ header h1:hover { animation: naturalGlow 2.5s infinite; }
 .diary-card {
     background: rgba(20, 25, 45, 0.4); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
     border-radius: 20px; padding: 30px 25px; 
-    margin-bottom: 20px; /* 연결선이 들어가므로 마진 조정 */
+    margin-bottom: 20px; 
     box-shadow: 0 10px 40px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.1);
 }
 

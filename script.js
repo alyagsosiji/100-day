@@ -113,12 +113,11 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.addEventListener('click', () => modal.classList.remove('open'));
     }
 
-    // [비밀번호 편지] 0114 / 0416
     const unlockBtn = document.getElementById('unlock-btn');
     if (unlockBtn) {
         unlockBtn.addEventListener('click', () => {
             const pw = document.getElementById('letter-password').value;
-            if (pw === '0114' || pw === '0416') {
+            if (pw === '0416') {
                 document.getElementById('lock-screen').style.display = 'none';
                 document.getElementById('secret-letter').classList.add('open');
             } else {

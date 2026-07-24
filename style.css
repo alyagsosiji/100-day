@@ -62,6 +62,7 @@ body {
     box-shadow: 0 0 15px 3px white, 0 0 30px 6px rgba(161, 140, 209, 0.7);
 }
 
+/* 별똥별이 더 풍성하게 나오도록 조정 */
 .shooting-star:nth-child(1) { top: -10%; right: -10%; animation: shooting 4.5s infinite linear 0s; }
 .shooting-star:nth-child(2) { top: 20%; right: -5%; animation: shooting 5.5s infinite linear 1.5s; }
 .shooting-star:nth-child(3) { top: -5%; right: 30%; animation: shooting 4s infinite linear 3s; }
@@ -69,6 +70,11 @@ body {
 .shooting-star:nth-child(5) { top: -15%; right: 60%; animation: shooting 5s infinite linear 4.5s; }
 .shooting-star:nth-child(6) { top: 10%; right: 10%; animation: shooting 4.8s infinite linear 2.5s; }
 .shooting-star:nth-child(7) { top: -5%; right: 80%; animation: shooting 6.5s infinite linear 5s; }
+.shooting-star:nth-child(8) { top: 30%; right: 40%; animation: shooting 5.2s infinite linear 2.2s; }
+.shooting-star:nth-child(9) { top: -20%; right: 20%; animation: shooting 6.1s infinite linear 3.7s; }
+.shooting-star:nth-child(10) { top: 50%; right: 10%; animation: shooting 4.3s infinite linear 1.8s; }
+.shooting-star:nth-child(11) { top: 5%; right: 50%; animation: shooting 5.8s infinite linear 4.1s; }
+.shooting-star:nth-child(12) { top: -10%; right: 90%; animation: shooting 6.2s infinite linear 0.5s; }
 
 @keyframes shooting {
     0% { transform: rotate(135deg) translate3d(0, 0, 0) scaleX(0); opacity: 0; }
@@ -77,7 +83,7 @@ body {
     100% { transform: rotate(135deg) translate3d(250vw, 0, 0) scaleX(0.3); opacity: 0; }
 }
 
-/* [UI 버튼류] */
+/* [UI 버튼류 및 호버] */
 .star-toggle-btn {
     position: fixed; top: 20px; left: 20px; z-index: 1000;
     background: rgba(20, 25, 45, 0.6); backdrop-filter: blur(10px);
@@ -112,10 +118,10 @@ header {
 }
 
 header h1 {
-    font-size: 3rem; font-weight: 800; margin-bottom: 20px;
+    font-size: 2.8rem; font-weight: 800; margin-bottom: 20px;
     background: linear-gradient(to right, #a18cd1, #fbc2eb);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    word-break: keep-all;
+    word-break: keep-all; padding: 0 15px;
 }
 header h1:hover { animation: naturalGlow 2.5s infinite; }
 
@@ -125,31 +131,12 @@ header h1:hover { animation: naturalGlow 2.5s infinite; }
     border: 1px solid rgba(246, 229, 141, 0.2);
 }
 
-/* [별빛 일자 줄 효과] */
-.starlight-line {
+/* [별빛 일자 줄 공통] */
+.starlight-line, .timeline-connector {
     width: 2px;
-    height: 35px;
-    margin: 10px 0 18px 10px;
-    background: linear-gradient(to bottom, rgba(161, 140, 209, 0.1), #a18cd1, #fbc2eb, #f6e58d, rgba(246, 229, 141, 0.1));
-    box-shadow: 0 0 8px rgba(251, 194, 235, 0.6), 0 0 12px rgba(161, 140, 209, 0.4);
-    border-radius: 2px;
     position: relative;
+    border-radius: 2px;
 }
-
-/* [수정됨] 헤더 전용 길어진 별빛 줄 */
-.header-line {
-    position: absolute;
-    bottom: 0; /* 화면 제일 아래부터 시작 */
-    left: 50%;
-    transform: translateX(-50%);
-    height: 180px; /* 기존보다 2.5배 더 길게 설정 */
-    margin: 0;
-    /* 위는 투명하게 시작하여 점점 선명해지는 효과 */
-    background: linear-gradient(to bottom, transparent, rgba(161, 140, 209, 0.2), #a18cd1, #fbc2eb);
-    box-shadow: 0 0 15px rgba(251, 194, 235, 0.4);
-}
-
-/* 별빛 입자가 아래로 내려가는 공통 애니메이션 */
 .starlight-line::after, .timeline-connector::after {
     content: '';
     position: absolute;
@@ -162,7 +149,6 @@ header h1:hover { animation: naturalGlow 2.5s infinite; }
     box-shadow: 0 0 10px 2px #ffffff, 0 0 15px 4px #fbc2eb;
     animation: starlightDrop 2.5s infinite ease-in-out;
 }
-
 @keyframes starlightDrop {
     0% { top: 0%; opacity: 0; }
     25% { opacity: 1; }
@@ -170,19 +156,38 @@ header h1:hover { animation: naturalGlow 2.5s infinite; }
     100% { top: 100%; opacity: 0; }
 }
 
-/* [추가됨] 카드와 카드를 잇는 연결 선 (스크롤 시 페이드인) */
+/* 카드 내부에 있는 작은 선 */
+.starlight-line:not(.header-line) {
+    height: 35px;
+    margin: 10px 0 18px 10px;
+    background: linear-gradient(to bottom, rgba(161, 140, 209, 0.1), #a18cd1, #fbc2eb, #f6e58d, rgba(246, 229, 141, 0.1));
+    box-shadow: 0 0 8px rgba(251, 194, 235, 0.6), 0 0 12px rgba(161, 140, 209, 0.4);
+}
+
+/* [수정 완벽 적용] 제목 아래 화면 끝까지 떨어지는 긴 별빛 선 */
+.header-line {
+    position: absolute;
+    bottom: 0; 
+    left: 50%;
+    transform: translateX(-50%);
+    /* 높이를 화면 비율 30%로 주어 짧아 보이지 않게 길게 설정 */
+    height: 30vh; 
+    min-height: 180px; 
+    margin: 0;
+    background: linear-gradient(to bottom, transparent, rgba(161, 140, 209, 0.5), #a18cd1, #fbc2eb);
+    box-shadow: 0 0 15px rgba(251, 194, 235, 0.6);
+}
+
+/* [추가 완벽 적용] 카드와 카드를 잇는 연결 선 */
 .timeline-connector {
-    width: 2px;
-    height: 60px; /* 카드 사이 간격 조절용 */
-    margin: 0 auto 20px auto;
+    height: 80px; /* 카드를 확실히 이어주도록 높이 설정 */
+    margin: -10px auto 30px auto; /* 카드 사이 간격 매끄럽게 연결 */
     background: linear-gradient(to bottom, rgba(161, 140, 209, 0.1), #a18cd1, #fbc2eb, rgba(251, 194, 235, 0.1));
-    box-shadow: 0 0 10px rgba(161, 140, 209, 0.4);
-    position: relative;
+    box-shadow: 0 0 10px rgba(161, 140, 209, 0.6);
     opacity: 0;
     transform: translateY(20px);
     transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
 }
-
 .timeline-connector.visible {
     opacity: 1;
     transform: translateY(0);
@@ -200,7 +205,7 @@ header h1:hover { animation: naturalGlow 2.5s infinite; }
 .diary-card {
     background: rgba(20, 25, 45, 0.4); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
     border-radius: 20px; padding: 30px 25px; 
-    margin-bottom: 20px; /* 연결선을 위해 마진 축소 */
+    margin-bottom: 20px; /* 연결선이 들어가므로 마진 조정 */
     box-shadow: 0 10px 40px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.1);
 }
 
@@ -285,10 +290,11 @@ header h1:hover { animation: naturalGlow 2.5s infinite; }
 .top-btn.show { opacity: 1; visibility: visible; }
 .top-btn:hover { background: rgba(161, 140, 209, 0.5); border-color: #fbc2eb; transform: translateY(-3px); }
 
-.site-footer { padding: 40px 20px; text-align: center; color: #666; font-size: 0.8rem; border-top: 1px solid rgba(255,255,255,0.05); }
+.site-footer { padding: 40px 20px; text-align: center; color: #8892b0; font-size: 0.9rem; line-height: 1.7; border-top: 1px solid rgba(255,255,255,0.05); }
+.site-footer strong { color: #fbc2eb; }
 
 @media (max-width: 768px) {
-    header h1 { font-size: 2.2rem; }
+    header h1 { font-size: 2rem; }
     .timeline { padding-top: 0; }
     .diary-card { padding: 25px 20px; }
 }

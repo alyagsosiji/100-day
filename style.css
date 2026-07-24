@@ -77,31 +77,31 @@ body {
     100% { transform: rotate(135deg) translate3d(250vw, 0, 0) scaleX(0.3); opacity: 0; }
 }
 
-/* [UI 버튼류 및 호버 복구] */
+/* [UI 버튼류] */
 .star-toggle-btn {
     position: fixed; top: 20px; left: 20px; z-index: 1000;
     background: rgba(20, 25, 45, 0.6); backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2); color: #e2e8f0;
     padding: 8px 15px; border-radius: 20px; font-size: 0.85rem; cursor: pointer;
-    transition: all 0.3s ease; /* 호버 복구 */
+    transition: all 0.3s ease;
 }
 .star-toggle-btn.active { color: #f6e58d; border-color: #f6e58d; }
-.star-toggle-btn:hover { transform: scale(1.05); background: rgba(255, 255, 255, 0.1); } /* 호버 복구 */
+.star-toggle-btn:hover { transform: scale(1.05); background: rgba(255, 255, 255, 0.1); }
 
 .bgm-player { position: fixed; top: 20px; right: 20px; z-index: 1000; }
 .bgm-btn {
     width: 40px; height: 40px; border-radius: 50%; background: rgba(20, 25, 45, 0.6);
     backdrop-filter: blur(10px); border: 1px solid rgba(246, 229, 141, 0.4); color: #f6e58d;
     display: flex; align-items: center; justify-content: center; cursor: pointer;
-    transition: all 0.3s ease; /* 호버 복구 */
+    transition: all 0.3s ease;
 }
-.bgm-btn:hover { transform: scale(1.08); border-color: #f6e58d; box-shadow: 0 0 15px rgba(246, 229, 141, 0.5); } /* 호버 복구 */
+.bgm-btn:hover { transform: scale(1.08); border-color: #f6e58d; box-shadow: 0 0 15px rgba(246, 229, 141, 0.5); }
 .bgm-btn.playing { animation: spinSlow 8s linear infinite; }
 @keyframes spinSlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
 /* [헤더] */
 header {
-    height: 100vh; /* 화면 꽉 차게 */
+    height: 100vh;
     display: flex; align-items: center; justify-content: center;
     text-align: center; position: relative; z-index: 1;
 }
@@ -115,6 +115,7 @@ header h1 {
     font-size: 3rem; font-weight: 800; margin-bottom: 20px;
     background: linear-gradient(to right, #a18cd1, #fbc2eb);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    word-break: keep-all;
 }
 header h1:hover { animation: naturalGlow 2.5s infinite; }
 
@@ -124,7 +125,7 @@ header h1:hover { animation: naturalGlow 2.5s infinite; }
     border: 1px solid rgba(246, 229, 141, 0.2);
 }
 
-/* [별빛 일자 줄 (스크롤 유도 및 카드 간격)] */
+/* [별빛 일자 줄 효과] */
 .starlight-line {
     width: 2px;
     height: 35px;
@@ -135,17 +136,21 @@ header h1:hover { animation: naturalGlow 2.5s infinite; }
     position: relative;
 }
 
-/* 헤더 전용 긴 별빛 줄 (스크롤 유도) */
+/* [수정됨] 헤더 전용 길어진 별빛 줄 */
 .header-line {
     position: absolute;
-    bottom: 40px; /* 화면 하단에 위치 */
+    bottom: 0; /* 화면 제일 아래부터 시작 */
     left: 50%;
     transform: translateX(-50%);
-    height: 80px; 
+    height: 180px; /* 기존보다 2.5배 더 길게 설정 */
     margin: 0;
+    /* 위는 투명하게 시작하여 점점 선명해지는 효과 */
+    background: linear-gradient(to bottom, transparent, rgba(161, 140, 209, 0.2), #a18cd1, #fbc2eb);
+    box-shadow: 0 0 15px rgba(251, 194, 235, 0.4);
 }
 
-.starlight-line::after {
+/* 별빛 입자가 아래로 내려가는 공통 애니메이션 */
+.starlight-line::after, .timeline-connector::after {
     content: '';
     position: absolute;
     top: 0;
@@ -165,6 +170,24 @@ header h1:hover { animation: naturalGlow 2.5s infinite; }
     100% { top: 100%; opacity: 0; }
 }
 
+/* [추가됨] 카드와 카드를 잇는 연결 선 (스크롤 시 페이드인) */
+.timeline-connector {
+    width: 2px;
+    height: 60px; /* 카드 사이 간격 조절용 */
+    margin: 0 auto 20px auto;
+    background: linear-gradient(to bottom, rgba(161, 140, 209, 0.1), #a18cd1, #fbc2eb, rgba(251, 194, 235, 0.1));
+    box-shadow: 0 0 10px rgba(161, 140, 209, 0.4);
+    position: relative;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.timeline-connector.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 /* [타임라인 카드] */
 .timeline { max-width: 600px; margin: 0 auto; padding: 20px 15px 100px; position: relative; z-index: 1; }
 
@@ -176,7 +199,8 @@ header h1:hover { animation: naturalGlow 2.5s infinite; }
 
 .diary-card {
     background: rgba(20, 25, 45, 0.4); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-    border-radius: 20px; padding: 30px 25px; margin-bottom: 50px;
+    border-radius: 20px; padding: 30px 25px; 
+    margin-bottom: 20px; /* 연결선을 위해 마진 축소 */
     box-shadow: 0 10px 40px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.1);
 }
 
@@ -221,9 +245,9 @@ header h1:hover { animation: naturalGlow 2.5s infinite; }
     width: 100%; padding: 14px; margin-top: 20px; border-radius: 30px;
     background: rgba(246, 229, 141, 0.05); color: #f6e58d;
     border: 1px solid rgba(246, 229, 141, 0.4); cursor: pointer; font-weight: 600;
-    transition: all 0.3s ease; /* 호버 복구 */
+    transition: all 0.3s ease;
 }
-.toggle-btn:hover { background-color: rgba(246, 229, 141, 0.15); border-color: #f6e58d; box-shadow: 0 0 15px rgba(246, 229, 141, 0.3); } /* 호버 복구 */
+.toggle-btn:hover { background-color: rgba(246, 229, 141, 0.15); border-color: #f6e58d; box-shadow: 0 0 15px rgba(246, 229, 141, 0.3); }
 
 /* [숨겨진 편지] */
 .hidden-letter-section {
@@ -236,9 +260,9 @@ header h1:hover { animation: naturalGlow 2.5s infinite; }
 }
 .lock-screen button {
     padding: 12px 20px; border-radius: 8px; background: #a18cd1; color: #fff; border: none; cursor: pointer;
-    transition: background 0.3s ease; /* 호버 복구 */
+    transition: background 0.3s ease;
 }
-.lock-screen button:hover { background: #fbc2eb; color: #1b2735; } /* 호버 복구 */
+.lock-screen button:hover { background: #fbc2eb; color: #1b2735; }
 .secret-letter { display: none; text-align: left; animation: modalFadeIn 0.8s ease forwards; }
 .secret-letter.open { display: block; }
 .secret-letter h3 { color: #fbc2eb; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
@@ -251,7 +275,7 @@ header h1:hover { animation: naturalGlow 2.5s infinite; }
 .image-modal.open { display: flex; }
 .modal-content { max-width: 90%; max-height: 80vh; border-radius: 10px; }
 .modal-close { position: absolute; top: 30px; right: 30px; color: #fff; font-size: 2rem; cursor: pointer; transition: color 0.2s ease; }
-.modal-close:hover { color: #f6e58d; } /* 호버 유지 */
+.modal-close:hover { color: #f6e58d; }
 
 .top-btn {
     position: fixed; bottom: 30px; right: 20px; width: 45px; height: 45px; border-radius: 50%;
@@ -259,7 +283,7 @@ header h1:hover { animation: naturalGlow 2.5s infinite; }
     opacity: 0; visibility: hidden; transition: all 0.3s ease; z-index: 1000; cursor: pointer;
 }
 .top-btn.show { opacity: 1; visibility: visible; }
-.top-btn:hover { background: rgba(161, 140, 209, 0.5); border-color: #fbc2eb; transform: translateY(-3px); } /* 호버 복구 */
+.top-btn:hover { background: rgba(161, 140, 209, 0.5); border-color: #fbc2eb; transform: translateY(-3px); }
 
 .site-footer { padding: 40px 20px; text-align: center; color: #666; font-size: 0.8rem; border-top: 1px solid rgba(255,255,255,0.05); }
 
